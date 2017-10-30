@@ -14,7 +14,7 @@
 <meta property="og:description" content="循环与递归的特点以及简单的转换。">
 <meta property="og:image" content="http://note.olddriver.meolddriver.me/images/20140917/01.jpg">
 <meta property="og:image" content="http://note.olddriver.meolddriver.me/images/20140917/02.jpg">
-<meta property="og:updated_time" content="2017-10-30T09:04:48.523Z">
+<meta property="og:updated_time" content="2017-10-30T09:09:44.254Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java中数组的特性">
 <meta name="twitter:description" content="循环与递归的特点以及简单的转换。">
@@ -127,7 +127,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">System.out.println(objectStr.getClass().getSuperclass().getName());</div><div class="line">运行结果是： java.lang.Object</div></pre></td></tr></table></figure>
 <p>但是根据上述运行结果可知String[]的直接父类是Object而不是Object[]，但是Object[]的引用指向了String[]类型的对象。那么关系就有点像这样：</p>
 <p><img src="/images/20140917/02.jpg" alt="02"></p>
-<p>但是这又违背了Java单继承的原则。所以上述假设是错的。也就是说，<em>String[]不继承自Object[]，但是我可以允许你向上转型到Object[]，这种特性是赋予你的一项特权。</em></p>
+<p>但是这又违背了Java单继承的原则。所以上述假设是错的。也就是说，_String[]不继承自Object[]，但是我可以允许你向上转型到Object[]，这种特性是赋予你的一项特权。</p>
 <p>其实这种关系可以这样表述：如果有两个类A和B，如果B继承（extends）了A，那么A[]类型的引用就可以指向B[]类型的对象。</p>
 <hr>
 <p><a href="http://li7nux.github.io/" target="_blank" rel="external">返回主页</a></p>
@@ -135,7 +135,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://note.olddriver.meolddriver.me/2014/09/17/Java-list-01/" data-id="cj9dylat20000lscdahf6pkjv" class="article-share-link">分享</a>
+      <a data-url="http://note.olddriver.meolddriver.me/2014/09/17/Java-list-01/" data-id="cj9dyrav40002k8cdkox6b9pj" class="article-share-link">分享</a>
       
       
       
