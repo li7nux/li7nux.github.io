@@ -6,15 +6,15 @@
   <title>Java中数组的特性 | Li7nux&#39;s Note</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="循环与递归的特点以及简单的转换。">
-<meta name="keywords" content="数组,java">
+<meta name="keywords" content="Java">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java中数组的特性">
-<meta property="og:url" content="http://note.olddriver.meolddriver.me/2014/09/17/2014-09-17-Java-02/index.html">
+<meta property="og:url" content="http://note.olddriver.meolddriver.me/2014/09/17/Java-list-01/index.html">
 <meta property="og:site_name" content="Li7nux&#39;s Note">
 <meta property="og:description" content="循环与递归的特点以及简单的转换。">
 <meta property="og:image" content="http://note.olddriver.meolddriver.me/images/20140917/01.jpg">
 <meta property="og:image" content="http://note.olddriver.meolddriver.me/images/20140917/02.jpg">
-<meta property="og:updated_time" content="2017-10-30T07:02:55.700Z">
+<meta property="og:updated_time" content="2017-10-30T09:04:48.523Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java中数组的特性">
 <meta name="twitter:description" content="循环与递归的特点以及简单的转换。">
@@ -45,7 +45,7 @@
         
           <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://note.olddriver.meolddriver.me"></form>
@@ -75,14 +75,14 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-2014-09-17-Java-02" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-Java-list-01" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2014/09/17/2014-09-17-Java-02/" class="article-date">
+    <a href="/2014/09/17/Java-list-01/" class="article-date">
   <time datetime="2014-09-17T14:11:02.000Z" itemprop="datePublished">2014-09-17</time>
 </a>
     
   <div class="article-category">
-    <a class="article-category-link" href="/categories/java/">java</a>►<a class="article-category-link" href="/categories/java/数组/">数组</a>
+    <a class="article-category-link" href="/categories/Java/">Java</a>
   </div>
 
   </div>
@@ -103,24 +103,25 @@
       
         <!-- Table of Contents -->
         
-        <p><strong>数组是基本上所有语言的一种数据类型，它表示的是一组相同类型的数据的集合，具有固定的长度，在内存中占有连续的空间。本文介绍了一些Java语言中的数据的一些特性。</strong></p>
+        <blockquote>
+<p>数组是基本上所有语言的一种数据类型，它表示的是一组相同类型的数据的集合，具有固定的长度，在内存中占有连续的空间。本文介绍了一些Java语言中的数据的一些特性。</p>
+</blockquote>
 <a id="more"></a>
 <h3 id="Java中的数组是对象吗？"><a href="#Java中的数组是对象吗？" class="headerlink" title="Java中的数组是对象吗？"></a>Java中的数组是对象吗？</h3><p><em>Java是一门面向对象的语言。在面向对象的语言中我们可以直接使用标准的类库，也可以使用组合和集成等面向对象的特性来构建自己的类，并且根据自己构建的类来创建对象。那么，问题就来了：在Java语言中，数组是对象么？</em></p>
 <p>要判断数组是不是对象，就要先了解什么是对象，对象的定义是什么。在较高的层面上，对象是根据某个类创建出来的一个实例，表示某类事物中一个具体的个体。对象具有各种属性，并且有一些特定的行为；而在较低的层面上，站在计算机的角度上，对象就是内存中一个内存块，这个内存块中封装了一些数据，也就是定义的各个属性，所以，对象是用来封装数据的。那么我们就来分析下什么是对象，以简单的Person对象为例，它在内存中可以表示为：</p>
 <p><img src="/images/20140917/01.jpg" alt="01"></p>
-<pre><code>图中蓝色矩形表示一个引用或者一个基本的数据类型，多个矩形图就组成了一个对象（P）。
-name是一个地址值也就是一个引用，指向了一个存在于堆内存的字符串“张飞”。
-</code></pre><p>由上图可知，对象由多个内存块组成，不同的内存块对应了对象的不同属性。而数组也是由一个个内存块组成的，封装了一些数据，这样也可以把数组称之为对象。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">int a = new int[10];</div><div class="line">int length = a.length;//获取数组长度</div><div class="line">a.toString();//调用数组所具有的方法</div></pre></td></tr></table></figure></p>
+<p>图中蓝色矩形表示一个引用或者一个基本的数据类型，多个矩形图就组成了一个对象（P）。<br>name是一个地址值也就是一个引用，指向了一个存在于堆内存的字符串“张飞”。</p>
+<p>由上图可知，对象由多个内存块组成，不同的内存块对应了对象的不同属性。而数组也是由一个个内存块组成的，封装了一些数据，这样也可以把数组称之为对象。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">int</span> a = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">10</span>];</div><div class="line"><span class="keyword">int</span> length = a.length;<span class="comment">//获取数组长度</span></div><div class="line">a.toString();<span class="comment">//调用数组所具有的方法</span></div></pre></td></tr></table></figure></p>
 <p>由此可知，在对于数组a，可以访问它的属性，也可以调用它的方法。数组就具有了Java中对象所具备的特点：封装了一些数据，可以访问属性，也可以调用方法。所以，数据是对象。</p>
 <h3 id="Java中数组的类型"><a href="#Java中数组的类型" class="headerlink" title="Java中数组的类型"></a>Java中数组的类型</h3><p>Java是一种强类型的语言。如果是对象就必须属于一个类型，比如用Person类创建了一个对象，这个对象的类型就是Person。数组也是一样的：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestArray</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">        <span class="comment">//打印int型数组类的名字</span></div><div class="line">        <span class="keyword">int</span> []arr = &#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">4</span>,<span class="number">5</span>&#125;;</div><div class="line">        System.out.println(arr.getClass().getName());</div><div class="line">        <span class="comment">//打印字符型数组类的名字</span></div><div class="line">        String[] arrName = <span class="keyword">new</span> String[<span class="number">10</span>];</div><div class="line">        System.out.println(arrName.getClass().getName());</div><div class="line">        <span class="comment">//打印二维数组类的名字</span></div><div class="line">        <span class="keyword">int</span>[][] arr2 = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">2</span>][<span class="number">2</span>];</div><div class="line">        System.out.println(arr2.getClass().getName());</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">运行结果如下：</div><div class="line">[I</div><div class="line">[Ljava.lang.String;</div><div class="line">[[I</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestArray</span> </span>&#123;</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">        <span class="comment">//打印int型数组类的名字</span></div><div class="line">        <span class="keyword">int</span> []arr = &#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">4</span>,<span class="number">5</span>&#125;;</div><div class="line">        System.out.println(arr.getClass().getName());</div><div class="line">        <span class="comment">//打印字符型数组类的名字</span></div><div class="line">        String[] arrName = <span class="keyword">new</span> String[<span class="number">10</span>];</div><div class="line">        System.out.println(arrName.getClass().getName());</div><div class="line">        <span class="comment">//打印二维数组类的名字</span></div><div class="line">        <span class="keyword">int</span>[][] arr2 = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">2</span>][<span class="number">2</span>];</div><div class="line">        System.out.println(arr2.getClass().getName());</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>运行结果如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[I</div><div class="line">[Ljava.lang.String;</div><div class="line">[[I</div></pre></td></tr></table></figure></p>
 <p>所以数组也是有类型的。只是类型比较奇怪。虽然我们没有像创建Person类一样去创建Int或者String类，但是在虚拟机自动创建了数组类型，可以把数组类型和8重基本数据类型一样，当做Java的内建类型。这种类型的命名规则是这样的：</p>
-<pre><code>每一维度用一个[表示；开头两个[，就代表是二维数组。[后面是数组中元素的类型(包括基本数据类型和引用数据类型)
-</code></pre><p>在java语言层面上,s是数组,也是一个对象,那么他的类型应该是String[]，这样说是合理的。但是在JVM中，他的类型为[java.lang.String。顺便说一句普通的类在JVM里的类型为 包名+类名，也就是全限定名。同一个类型在java语言中和在虚拟机中的表示可能是不一样的。</p>
+<p>每一维度用一个[表示；开头两个[，就代表是二维数组。[后面是数组中元素的类型(包括基本数据类型和引用数据类型)</p>
+<p>在java语言层面上,s是数组,也是一个对象,那么他的类型应该是String[]，这样说是合理的。但是在JVM中，他的类型为[java.lang.String。顺便说一句普通的类在JVM里的类型为 包名+类名，也就是全限定名。同一个类型在java语言中和在虚拟机中的表示可能是不一样的。</p>
 <h3 id="Java中数组的继承关系"><a href="#Java中数组的继承关系" class="headerlink" title="Java中数组的继承关系"></a>Java中数组的继承关系</h3><p>上面验证了数组是对象，那么久可以用操作对象的方式来操作数组。并且在虚拟机中有它特别的类型。在Java中所有类的父类都是Object，所以数组的顶层父类也是object。这就说明数组可以向上直接转型到Object，也可以向下进行强制转换。可以用instanceof判断：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">int arr[] = new int[4];</div><div class="line">Object object = arr;</div><div class="line">int arr2[] = (int[])object;	//强制向下转型</div><div class="line">if (object instanceof int[]) &#123;</div><div class="line">	System.out.println(&quot;object 的真实类型是int[]&quot;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>###Java中数组的另一种“继承”关系</p>
-<p>先来看一段代码：</p>
+<h3 id="Java中数组的另一种“继承”关系"><a href="#Java中数组的另一种“继承”关系" class="headerlink" title="Java中数组的另一种“继承”关系"></a>Java中数组的另一种“继承”关系</h3><p>先来看一段代码：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">String arrStr[] = new String[5];</div><div class="line">Object[] objectStr = arrStr;</div></pre></td></tr></table></figure>
 <p>由此我们可以推测String[]继承自Object[]，而Object[]又继承自Object？</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">System.out.println(objectStr.getClass().getSuperclass().getName());</div><div class="line">运行结果是： java.lang.Object</div></pre></td></tr></table></figure>
@@ -134,11 +135,11 @@ name是一个地址值也就是一个引用，指向了一个存在于堆内存�
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://note.olddriver.meolddriver.me/2014/09/17/2014-09-17-Java-02/" data-id="cj9du84tx0001s4cd87w00pf1" class="article-share-link">Share</a>
+      <a data-url="http://note.olddriver.meolddriver.me/2014/09/17/Java-list-01/" data-id="cj9dylat20000lscdahf6pkjv" class="article-share-link">分享</a>
       
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数组/">数组</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
 
     </footer>
   </div>
@@ -146,7 +147,7 @@ name是一个地址值也就是一个引用，指向了一个存在于堆内存�
     
  <script src="/jquery/jquery.min.js"></script>
   <div id="random_posts">
-    <h2>Recommended Posts</h2>
+    <h2>推荐文章</h2>
     <div class="random_posts_ul">
       <script>
           var random_count =4
@@ -188,8 +189,8 @@ name是一个地址值也就是一个引用，指向了一个存在于堆内存�
     
 <nav id="article-nav">
   
-    <a href="/2014/12/10/Java 8 - 01/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
+    <a href="/2014/12/11/Java8-01/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
       <div class="article-nav-title">
         
           Java 8 新特性
@@ -229,9 +230,9 @@ name是一个地址值也就是一个引用，指向了一个存在于堆内存�
     
       <div class="widget" id="toc-widget-fixed">
       
-        <strong class="toc-title">Content</strong>
+        <strong class="toc-title">文章目录</strong>
         <div class="toc-widget-list">
-              <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Java中的数组是对象吗？"><span class="toc-number">1.</span> <span class="toc-text">Java中的数组是对象吗？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Java中数组的类型"><span class="toc-number">2.</span> <span class="toc-text">Java中数组的类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Java中数组的继承关系"><span class="toc-number">3.</span> <span class="toc-text">Java中数组的继承关系</span></a></li></ol>
+              <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Java中的数组是对象吗？"><span class="toc-number">1.</span> <span class="toc-text">Java中的数组是对象吗？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Java中数组的类型"><span class="toc-number">2.</span> <span class="toc-text">Java中数组的类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Java中数组的继承关系"><span class="toc-number">3.</span> <span class="toc-text">Java中数组的继承关系</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Java中数组的另一种“继承”关系"><span class="toc-number">4.</span> <span class="toc-text">Java中数组的另一种“继承”关系</span></a></li></ol>
           </div>
       </div>
     </div>
@@ -261,10 +262,10 @@ name是一个地址值也就是一个引用，指向了一个存在于堆内存�
   <div class="outer">
     <div id="footer-left">
       &copy; 2014 - 2017 Li7nux&nbsp;|&nbsp;
-      Theme by <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>
     </div>
      <div id="footer-right">
-      Contact&nbsp;|&nbsp;li7nux@gmail.com
+      联系方式&nbsp;|&nbsp;li7nux@gmail.com
     </div>
   </div>
 </footer>
