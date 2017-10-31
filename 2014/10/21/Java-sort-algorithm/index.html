@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Java排序算法 | Li7nux&#39;s Note</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="分析Java较为常见的四种排序算法。">
+<meta name="keywords" content="Java,Algorithm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java排序算法">
+<meta property="og:url" content="http://note.olddriver.meolddriver.me/2014/10/21/Java-sort-algorithm/index.html">
+<meta property="og:site_name" content="Li7nux&#39;s Note">
+<meta property="og:description" content="分析Java较为常见的四种排序算法。">
+<meta property="og:image" content="http://note.olddriver.meolddriver.me/images/20141021/01.gif">
+<meta property="og:image" content="http://note.olddriver.meolddriver.me/images/20141021/02.gif">
+<meta property="og:image" content="http://note.olddriver.meolddriver.me/images/20141021/03.gif">
+<meta property="og:image" content="http://note.olddriver.meolddriver.me/images/20141021/04.gif">
+<meta property="og:image" content="http://note.olddriver.meolddriver.me/images/20141021/05.png">
+<meta property="og:updated_time" content="2017-10-31T03:38:44.833Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java排序算法">
+<meta name="twitter:description" content="分析Java较为常见的四种排序算法。">
+<meta name="twitter:image" content="http://note.olddriver.meolddriver.me/images/20141021/01.gif">
+  
+    <link rel="alternate" href="/atom.xml" title="Li7nux&#39;s Note" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="favicon.ico">
+  
+  
+    
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://note.olddriver.meolddriver.me"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+          <a class="main-nav-link" href="/aboutme">关于</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Li7nux&#39;s Note</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">我的笔记</a>
+        </h2>
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Java-sort-algorithm" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2014/10/21/Java-sort-algorithm/" class="article-date">
+  <time datetime="2014-10-21T14:00:22.000Z" itemprop="datePublished">2014-10-21</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Java/">Java</a>►<a class="article-category-link" href="/categories/Java/Algorithm/">Algorithm</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Java排序算法
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <blockquote>
+<p>在计算机科学与数学中，一个排序算法（Sorting algorithm）是一种能将一串数据依照特定排序方式进行排列的一种算法。最常用到的排序方式是数值顺序以及字典顺序。有效的排序算法在一些算法（例如搜索算法与合并算法）中是重要的，如此这些算法才能得到正确解答。排序算法也用在处理文字数据以及产生人类可读的输出结果。基本上，排序算法的输出必须遵守下列两个原则：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">1. 输出结果为递增序列（递增是针对所需的排序顺序而言）</div><div class="line">2. 输出结果是原输入的一种排列、或是重组</div></pre></td></tr></table></figure></p>
+</blockquote>
+<a id="more"></a>
+<p>JAVA中在运用数组进行排序功能时，一般有四种方法：快速排序法（系统自带）、冒泡排序、选择排序、插入排序:</p>
+<ul>
+<li><a href="#1">1.快速排序</a></li>
+<li><a href="#2">2.冒泡排序</a></li>
+<li><a href="#3">3.选择排序</a></li>
+<li><a href="#4">4.插入排序</a></li>
+<li><a href="#4">5.简单比较</a></li>
+</ul>
+<hr>
+<h2 id="1-快速排序"><a href="#1-快速排序" class="headerlink" title="1.快速排序"></a>1.快速排序</h2><blockquote>
+<p>快速排序是由东尼·霍尔所发展的一种排序算法。在平均状况下，排序 n 个项目要Ο(n log n)次比较。在最坏状况下则需要Ο(n2)次比较，但这种状况并不常见。事实上，快速排序通常明显比其他Ο(n log n) 算法更快，因为它的内部循环（inner loop）可以在大部分的架构上很有效率地被实作出来。<br>使用快速排序法对一列数字进行排序的过程如下：</p>
+</blockquote>
+<p><img src="/images/20141021/01.gif" alt="sort"></p>
+<p>快速排序法主要是运用了 Arrays 中的一个方法 Arrays.sort() 实现。具体实现代码片段如下，直接调用即可：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">int</span> array[] = &#123;<span class="number">1</span>,<span class="number">12</span>,<span class="number">55</span>,<span class="number">34</span>,<span class="number">16</span>,<span class="number">0</span>,<span class="number">56</span>,<span class="number">45</span>,<span class="number">3</span>,<span class="number">77</span>,<span class="number">7</span>,<span class="number">99</span>&#125;;	<span class="comment">//定义数组</span></div><div class="line">Arrays.sort(array);			<span class="comment">//调用方法进行排序</span></div></pre></td></tr></table></figure></p>
+<hr>
+<h2 id="2">2.冒泡排序</h2>
+
+<blockquote>
+<p>冒泡排序（Bubble Sort）是一种简单的排序算法。它重复地走访过要排序的数列，一次比较两个元素，如果他们的顺序错误就把他们交换过来。走访数列的工作是重复地进行直到没有再需要交换，也就是说该数列已经排序完成。这个算法的名字由来是因为越小的元素会经由交换慢慢“浮”到数列的顶端。<br>冒泡排序对n个项目需要O(n^2)的比较次数，且可以原地排序。尽管这个算法是最简单了解和实作的排序算法之一，但它对于少数元素之外的数列排序是很没有效率的。<br>冒泡排序是与插入排序拥有相等的运行时间，但是两种法在需要的交换次数却很大地不同。在最好的情况，冒泡排序需要O(n^2)次交换，而插入排序只要最多O(n)交换。冒泡排序的实现（类似下面）通常会对已经排序好的数列拙劣地运行（O(n^2)），而插入排序在这个例子只需要O(n)个运算。因此很多现代的算法教科书避免使用冒泡排序，而用插入排序取代之。冒泡排序如果能在内部循环第一次运行时，使用一个旗标来表示有无需要交换的可能，也可以把最好的复杂度降低到O(n)。在这个情况，已经排序好的数列就无交换的需要。若在每次走访数列时，把走访顺序反过来，也可以稍微地改进效率。有时候称为鸡尾酒排序，因为算法会从数列的一端到另一端之间穿梭往返。<br>冒泡排序算法的运作如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">比较相邻的元素。如果第一个比第二个大，就交换他们两个。</div><div class="line">对每一对相邻元素作同样的工作，从开始第一对到结尾的最后一对。这步做完后，最后的元素会是最大的数。</div><div class="line">针对所有的元素重复以上的步骤，除了最后一个。</div><div class="line">持续每次对越来越少的元素重复上面的步骤，直到没有任何一对数字需要比较。</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>使用冒泡排序为一列数字进行排序的过程：</p>
+<p><img src="/images/20141021/02.gif" alt="bubble sort"></p>
+<p>具体代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span>[] bubleSort(<span class="keyword">int</span> arr[])&#123;</div><div class="line">    <span class="comment">//遍历数组，遍历length - 1轮</span></div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; arr.length - <span class="number">1</span>; i++) &#123;</div><div class="line">        <span class="comment">//对当前无序区间arr[0......length-i-1]进行排序 ( j 的范围很关键 ,</span></div><div class="line">        <span class="comment">//这个范围是在逐步缩小的 ， 因为每排一次，最大的数就在最右边)</span></div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; arr.length - i - <span class="number">1</span>; j++) &#123;</div><div class="line">            <span class="keyword">if</span> (arr[j] &gt; arr[j + <span class="number">1</span>]) &#123;			<span class="comment">//比较相邻的两个数，小的数交换到左边</span></div><div class="line">                <span class="keyword">int</span> temp = arr[j];</div><div class="line">                arr[j] = arr[j+<span class="number">1</span>] ;</div><div class="line">                arr[j+<span class="number">1</span>] = temp ;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> arr;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<hr>
+<h2 id="3">3.选择排序</h2>
+
+<blockquote>
+<p>选择排序(Selection sort)是一种简单直观的排序算法。它的工作原理如下。首先在未排序序列中找到最小（大）元素，存放到排序序列的起始位置，然后，再从剩余未排序元素中继续寻找最小（大）元素，然后放到已排序序列的末尾。以此类推，直到所有元素均排序完毕。<br>选择排序的主要优点与数据移动有关。如果某个元素位于正确的最终位置上，则它不会被移动。选择排序每次交换一对元素，它们当中至少有一个将被移到其最终位置上，因此对n个元素的表进行排序总共进行至多n-1次交换。在所有的完全依靠交换去移动元素的排序方法中，选择排序属于非常好的一种。</p>
+</blockquote>
+<p>使用选择排序为一列数字进行排序的过程：</p>
+<p><img src="/images/20141021/03.gif" alt="selection sort"></p>
+<p>具体实现代码加注释如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span>[] selectSort(<span class="keyword">int</span> arr[])&#123;</div><div class="line">    <span class="keyword">int</span> min = <span class="number">0</span>;			<span class="comment">//定义一个变量，存放当前最小值的下标</span></div><div class="line">    <span class="keyword">int</span> temp = <span class="number">0</span>;			<span class="comment">//定义一个temp值，用于之后的数值交换</span></div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; arr.length - <span class="number">1</span>; i++) &#123;</div><div class="line">        <span class="comment">//假定第一个元素为最小元素</span></div><div class="line">        min = i;</div><div class="line">        <span class="comment">//循环遍历元素，每遍历一个元素，与当前最小元素比较，若此元素比当前最小元素小，则将此元素置为最小元素</span></div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = i + <span class="number">1</span>; j &lt; arr.length ; j++) &#123;</div><div class="line">            <span class="comment">//遍历一遍，找到一个比假设最小值小的元素，把此最小元素的下标值赋值给min</span></div><div class="line">            <span class="keyword">if</span> (arr[j] &lt; arr[min]) &#123;</div><div class="line">                min = j ;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="comment">//遍历一遍，找到一个最小元素，把此最小元素的 arr[i] 与 arr[min] 交换位置</span></div><div class="line">        temp = arr[i];</div><div class="line">        arr[i] = arr[min];</div><div class="line">        arr[min] = temp;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> arr;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<hr>
+<h2 id="4">4.插入排序</h2>
+
+
+<blockquote>
+<p>插入排序（Insertion Sort）的算法描述是一种简单直观的排序算法。它的工作原理是通过构建有序序列，对于未排序数据，在已排序序列中从后向前扫描，找到相应位置并插入。插入排序在实现上，通常采用in-place排序（即只需用到O(1)的额外空间的排序），因而在从后向前扫描过程中，需要反复把已排序元素逐步向后挪位，为最新元素提供插入空间。</p>
+</blockquote>
+<p>使用插入排序为一列数字进行排序的过程：</p>
+<p><img src="/images/20141021/04.gif" alt="Insertion sort"></p>
+<p>具体实现代码加注释如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span>[] insertSort(<span class="keyword">int</span> arr[])&#123;</div><div class="line">    <span class="comment">//从数组的第二个位置开始遍历值  </span></div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; arr.length; i++) &#123;</div><div class="line">        <span class="keyword">int</span> position = arr[i];		<span class="comment">//存放要插入的值，防止之后比较交换位置的时候被覆盖</span></div><div class="line">        <span class="comment">//注意是从第 i 个位置往前开始查找排序</span></div><div class="line">        <span class="keyword">int</span> j = i -<span class="number">1</span>;	<span class="comment">//a[j] 表示要与 a[i] 进行比较的数</span></div><div class="line">        <span class="keyword">while</span>(j&gt;=<span class="number">0</span> &amp;&amp; arr[j] &gt; position)&#123;	<span class="comment">//当 j &gt; 0 ，而且 a[i] 之前存在比a[i]大的数</span></div><div class="line">            arr[j+<span class="number">1</span>] = arr[j];				<span class="comment">//这里相当于a[i]的值也变了。变成 a[j+1] 。</span></div><div class="line">            j--;					<span class="comment">//继续往前查找</span></div><div class="line">        &#125;</div><div class="line">        arr[j+<span class="number">1</span>] = position ;		<span class="comment">//将值插入</span></div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> arr;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<hr>
+<h2 id="5">5.简单比较</h2>
+
+
+<p><img src="/images/20141021/05.png" alt="Compare"></p>
+<p>本文中出现的一些学术性解释，均摘自<a href="http://zh.wikipedia.org/wiki/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95" target="_blank" rel="external">维基百科</a></p>
+<hr>
+<p><a href="http://li7nux.github.io/" target="_blank" rel="external">返回主页</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://note.olddriver.meolddriver.me/2014/10/21/Java-sort-algorithm/" data-id="cj9f2hajz0005nscdqfbdemyu" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Algorithm/">Algorithm</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+ <script src="/jquery/jquery.min.js"></script>
+  <div id="random_posts">
+    <h2>Recommended Posts</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =4
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+    
+<nav id="article-nav">
+  
+    <a href="/2014/12/10/Java8-01/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Java 8 新特性
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2014/09/17/Java-list-01/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Java中数组的特性</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+ 
+     
+  <div class="comments" id="comments">
+    
+     
+       
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+       
+      
+      
+  </div>
+ 
+  
+
+</section>
+           
+    <aside id="sidebar">
+  
+    
+
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">Content</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-快速排序"><span class="toc-number">1.</span> <span class="toc-text">1.快速排序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2"><span class="toc-number">2.</span> <span class="toc-text">2.冒泡排序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3"><span class="toc-number">3.</span> <span class="toc-text">3.选择排序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4"><span class="toc-number">4.</span> <span class="toc-text">4.插入排序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5"><span class="toc-number">5.</span> <span class="toc-text">5.简单比较</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+    
+  
+    <!--微信公众号二维码-->
+
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2014 - 2017 Li7nux&nbsp;|&nbsp;
+      Theme by <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>
+    </div>
+     <div id="footer-right">
+      Contact&nbsp;|&nbsp;li7nux@gmail.com
+    </div>
+  </div>
+</footer>
+ <script src="/jquery/jquery.min.js"></script>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+    <a href="/aboutme" class="mobile-nav-link">关于</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "e2fb4051c49842688ce669e634bc983f",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+    
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      })
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      })
+    </script>
+    <script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+ <script src="/js/is.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/elevator.js"></script>
+  </div>
+</body>
+</html>
