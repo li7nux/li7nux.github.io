@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>SimpleDateFormat 时间格式化问题 | Li7nux&#39;s Note</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+    <meta name="keywords" content="Li7nux,Li7nux's Note" />
+  
+  <meta name="description" content="SimpleDateFormat 带来的问题记录，和一些解决方案">
+<meta name="keywords" content="Java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SimpleDateFormat 时间格式化问题">
+<meta property="og:url" content="http://note.olddriver.me/2017/12/17/Java-SimpleDateFormat/index.html">
+<meta property="og:site_name" content="Li7nux&#39;s Note">
+<meta property="og:description" content="SimpleDateFormat 带来的问题记录，和一些解决方案">
+<meta property="og:image" content="http://note.olddriver.me/images/20171217/test_result_1.png">
+<meta property="og:updated_time" content="2017-12-27T09:46:29.409Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SimpleDateFormat 时间格式化问题">
+<meta name="twitter:description" content="SimpleDateFormat 带来的问题记录，和一些解决方案">
+<meta name="twitter:image" content="http://note.olddriver.me/images/20171217/test_result_1.png">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/pace.min.js"></script>
+  
+
+  
+  
+
+</head>
+
+<body>
+  <div id="container">
+      <header id="header">
+    <div id="banner"></div>
+    <div id="header-outer">
+        <div id="header-menu" class="header-menu-pos animated">
+            <div class="header-menu-container">
+                <a href="/" class="left">
+                    <span class="site-title">Li7nux&#39;s Note</span>
+                </a>
+                <nav id="header-menu-nav" class="right">
+                    
+                    <a  href="/">
+                        <i class="fa fa-home"></i>
+                        <span>Home</span>
+                    </a>
+                    
+                    <a  href="/archives">
+                        <i class="fa fa-archive"></i>
+                        <span>Archives</span>
+                    </a>
+                    
+                    <a  href="/about">
+                        <i class="fa fa-user"></i>
+                        <span>About</span>
+                    </a>
+                    
+                </nav>
+                <a class="mobile-header-menu-button">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
+        </div>
+        <div id="header-row">
+            <div id="logo">
+                <a href="/">
+                    <img src="/images/logo.png" alt="logo">
+                </a>
+            </div>
+            <div class="header-info">
+                <div id="header-title">
+                    
+                    <h2>
+                        Li7nux&#39;s Note
+                    </h2>
+                    
+                </div>
+                <div id="header-description">
+                    
+                    <h3>
+                        敲代码的手艺人
+                    </h3>
+                    
+                </div>
+            </div>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                        <a title="Li7nux" target="_blank" href="//note.olddriver.me/">
+                            <i class="fa fa-home fa-2x"></i></a>
+                    
+                        <a title="Github" target="_blank" href="//github.com/li7nux">
+                            <i class="fa fa-github fa-2x"></i></a>
+                    
+                        <a title="Weibo" target="_blank" href="//weibo.com/li7nux">
+                            <i class="fa fa-weibo fa-2x"></i></a>
+                    
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>
+      <div class="outer">
+        <section id="main" class="body-wrap"><article id="post-Java-SimpleDateFormat" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="post-title" itemprop="name">
+      SimpleDateFormat 时间格式化问题
+    </h1>
+    <div class="post-title-bar">
+      <ul>
+          
+              <li>
+                  <i class="fa fa-book"></i>
+                  
+                      <a href="/categories/Java/">Java</a>
+                  
+              </li>
+          
+        <li>
+          <i class="fa fa-calendar"></i>  2017-12-17
+        </li>
+        <li>
+          <i class="fa fa-eye"></i>
+          <span id="busuanzi_value_page_pv"></span>
+        </li>
+      </ul>
+    </div>
+  
+
+          
+      </header>
+    
+    <div class="article-entry post-content" itemprop="articleBody">
+      
+            
+            <blockquote>
+<p>在生产中遇到一个问题，在使用日期查询时，传入的是 A时间，查询结果缺是 B时间的。通过日志追踪和测试，发现是一个工具类中使用了非线程安全的类<code>SimpleDateFormat</code>引起的。觉得挺有意思的，就记录下问题的产生原因和解决方案。</p>
+</blockquote>
+<a id="more"></a>
+<h3 id="测试验证"><a href="#测试验证" class="headerlink" title="测试验证"></a>测试验证</h3><p>在工具类(<a href="https://github.com/li7nux/mulholland/blob/master/core-java/src/main/java/com/chcp/date/unsafe/TimeHelper.java" target="_blank" rel="external"><code>TimeHelper(链接)</code></a>)中，定义了时间格式常量:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> SimpleDateFormat yyyy_MM_dd_HH_mm_ss = <span class="keyword">new</span> SimpleDateFormat(<span class="string">"yyyy-MM-dd HH:mm:ss"</span>);</div></pre></td></tr></table></figure>
+<p>然后编写多线程测试代<a href="https://github.com/li7nux/mulholland/blob/master/core-java/src/main/java/com/chcp/date/unsafe/TimeHelperTest.java" target="_blank" rel="external"><code>TimeHelperTest(链接)</code></a>码:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.chcp.date.unsafe;</div><div class="line"></div><div class="line"><span class="keyword">import</span> java.text.ParseException;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * <span class="doctag">@author</span> &lt;a href="mailto:Li7nux@gmail.com"&gt;Li7nux&lt;/a&gt;</div><div class="line"> * Date: 2017-11-30 11:06</div><div class="line"> * Description: SimpleDateFormat 时间格式化，非线程安全测试类</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TimeHelperTest</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">TestSimpleDateFormatThreadSafe</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</div><div class="line"></div><div class="line">        <span class="meta">@Override</span></div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">            <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</div><div class="line">                <span class="keyword">try</span> &#123;</div><div class="line">                    <span class="keyword">this</span>.join(<span class="number">500</span>);</div><div class="line">                    System.out.println(<span class="keyword">this</span>.getName() + <span class="string">" : "</span> + TimeHelper.yyyy_MM_dd_HH_mm_ss.parse(<span class="string">"2017-12-01 10:03:01"</span>));</div><div class="line">                &#125; <span class="keyword">catch</span> (InterruptedException | ParseException e) &#123;</div><div class="line">                    e.printStackTrace();</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">3</span>; i++) &#123;</div><div class="line">            <span class="keyword">new</span> TestSimpleDateFormatThreadSafe().start();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>运行测试代码，得到如下结果:</p>
+<p><img src="/images/20171217/test_result_1.png" alt="01"></p>
+<p>从上述结果中可以看到:</p>
+<ul>
+<li><code>Thread-0</code> 格式化出来的时间不对 </li>
+<li><code>Thread-1</code> 和 <code>Thread-2</code> 直接挂死了</li>
+</ul>
+<p>那是什么原因引起的？</p>
+<h3 id="出现异常的原因"><a href="#出现异常的原因" class="headerlink" title="出现异常的原因"></a>出现异常的原因</h3><p>查看 <code>SimpleDateFormat</code> 源码，其中有这样一段注释:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">* Date formats are not <span class="keyword">synchronized</span>.</div><div class="line">* It is recommended to create separate format instances <span class="keyword">for</span> each thread.</div><div class="line">* If multiple threads access a format concurrently, it must be <span class="keyword">synchronized</span></div><div class="line">* externally.</div></pre></td></tr></table></figure>
+<p>意思就是<code>SimpleDateFormat</code>是非线程安全的，推荐为每个线程创建独立的格式实例。</p>
+<p>而工具类 <code>TimeHelper</code> 中为了节省资源，创建了一个静态的<code>SimpleDateFormat</code>对象，方便重复使用，这就带来了一个问题: 多线程访问非线程安全的资源。这就是问题所在。</p>
+<h3 id="为什么-SimpleDateFormat-不是线程安全的-？"><a href="#为什么-SimpleDateFormat-不是线程安全的-？" class="headerlink" title="为什么 SimpleDateFormat 不是线程安全的 ？"></a>为什么 <code>SimpleDateFormat</code> 不是线程安全的 ？</h3><p>追踪到 <code>format()</code>方法: </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">// Called from Format after creating a FieldDelegate</span></div><div class="line"><span class="function"><span class="keyword">private</span> StringBuffer <span class="title">format</span><span class="params">(Date date, StringBuffer toAppendTo,</span></span></div><div class="line">                            FieldDelegate delegate) &#123;</div><div class="line">    <span class="comment">// Convert input date to time field list</span></div><div class="line">    calendar.setTime(date);</div><div class="line"></div><div class="line">    <span class="keyword">boolean</span> useDateFormatSymbols = useDateFormatSymbols();</div><div class="line"></div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; compiledPattern.length; ) &#123;</div><div class="line">        <span class="keyword">int</span> tag = compiledPattern[i] &gt;&gt;&gt; <span class="number">8</span>;</div><div class="line">        <span class="keyword">int</span> count = compiledPattern[i++] &amp; <span class="number">0xff</span>;</div><div class="line">        <span class="keyword">if</span> (count == <span class="number">255</span>) &#123;</div><div class="line">            count = compiledPattern[i++] &lt;&lt; <span class="number">16</span>;</div><div class="line">            count |= compiledPattern[i++];</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">switch</span> (tag) &#123;</div><div class="line">        <span class="keyword">case</span> TAG_QUOTE_ASCII_CHAR:</div><div class="line">            toAppendTo.append((<span class="keyword">char</span>)count);</div><div class="line">            <span class="keyword">break</span>;</div><div class="line"></div><div class="line">        <span class="keyword">case</span> TAG_QUOTE_CHARS:</div><div class="line">            toAppendTo.append(compiledPattern, i, count);</div><div class="line">            i += count;</div><div class="line">            <span class="keyword">break</span>;</div><div class="line"></div><div class="line">        <span class="keyword">default</span>:</div><div class="line">            subFormat(tag, count, delegate, toAppendTo, useDateFormatSymbols);</div><div class="line">            <span class="keyword">break</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> toAppendTo;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>根源就是这个 <code>calendar</code>，并发格式化，进行<code>calendar.setTime(date);</code>操作的时候，这个 <code>calendar</code>没做保护。这就是 <code>SimpleDateFormat</code> 不是线程安全的原因。</p>
+<h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h3><p><code>SimpleDateFormat</code>不是线程安全的，为了解决这个问题，我可以让我的对我的工具类进行改造，或者使用其他类替换<code>SimpleDateFormat</code>。</p>
+<h4 id="工具类改造"><a href="#工具类改造" class="headerlink" title="工具类改造"></a>工具类改造</h4><p><strong>1. 为每个线程创建<code>SimpleDateFormat</code></strong></p>
+<ul>
+<li>方法: 每次使用 <code>TimeHelper</code>的时候，都要 new 一个出来</li>
+<li>缺陷: 不断的创建，耗费资源</li>
+</ul>
+<p><strong>2. 同步<code>SimpleDateFormat</code></strong></p>
+<ul>
+<li>方法: 加 <code>synchronized</code>关键字修饰 <code>SimpleDateFormat</code> (<a href="https://github.com/li7nux/mulholland/blob/master/core-java/src/main/java/com/chcp/date/threadlocal/SimpleDateFormatParseUtil.java" target="_blank" rel="external">例子链接</a>)</li>
+<li>缺陷: 高并发阻塞影响性能</li>
+</ul>
+<p><strong>3. <code>ThreadLocal</code></strong></p>
+<ul>
+<li>方法: 使用<code>ThreadLocal</code>创建变量只能被当前线程访问，其他线程则无法访问和修改。(<a href="https://github.com/li7nux/mulholland/blob/master/core-java/src/main/java/com/chcp/date/threadlocal/ThreadLocalDateUtil.java" target="_blank" rel="external">例子链接</a>)</li>
+<li>缺陷: 并发量大了还是会阻塞</li>
+</ul>
+<p><strong>4. <code>FastDateFormat</code></strong></p>
+<ul>
+<li>方法: 使用<code>Apache commons</code> 的<code>FastDateFormat</code> (<a href="https://github.com/li7nux/mulholland/blob/master/core-java/src/main/java/com/chcp/date/fastdate/FastDateFormatUtil.java" target="_blank" rel="external">例子</a>)</li>
+<li>缺陷: 只能格式化，不能解析</li>
+</ul>
+<p><strong>5. <code>Joda-Time</code></strong></p>
+<ul>
+<li>方法: 使用<code>Joda-Time</code> (<a href="https://github.com/li7nux/mulholland/blob/master/java-x/src/main/java/com/chcp/joda/TimeHelper.java" target="_blank" rel="external"><code>Joda Util</code></a>)</li>
+<li>缺陷: 完美解决方案</li>
+</ul>
+<hr>
+<p><a href="http://li7nux.github.io/" target="_blank" rel="external">返回主页</a></p>
+
+            <div class="post-copyright">
+    <div class="content">
+        <p>最后更新： 2017年12月27日 17:46</p>
+        <p>原始链接： <a class="post-url" href="/2017/12/17/Java-SimpleDateFormat/" title="SimpleDateFormat 时间格式化问题">http://note.olddriver.me/2017/12/17/Java-SimpleDateFormat/</a></p>
+        <footer>
+            <a href="http://note.olddriver.me">
+                <img src="/images/logo.png" alt="Li7nux">
+                Li7nux
+            </a>
+        </footer>
+    </div>
+</div>
+
+      
+        
+            
+
+        
+    </div>
+    <footer class="article-footer">
+        
+        
+<div class="post-share">
+    <a href="javascript:;" id="share-sub" class="post-share-fab">
+        <i class="fa fa-share-alt"></i>
+    </a>
+    <div class="post-share-list" id="share-list">
+        <ul class="share-icons">
+          <li>
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://note.olddriver.me/2017/12/17/Java-SimpleDateFormat/&title=《SimpleDateFormat 时间格式化问题》 — Li7nux's Note&pic=http://note.olddriver.meimages/logo.png" data-title="微博">
+              <i class="fa fa-weibo"></i>
+            </a>
+          </li>
+          <li>
+            <a class="weixin share-sns" id="wxFab" href="javascript:;" data-title="微信">
+              <i class="fa fa-weixin"></i>
+            </a>
+          </li>
+          <li>
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://note.olddriver.me/2017/12/17/Java-SimpleDateFormat/&title=《SimpleDateFormat 时间格式化问题》 — Li7nux's Note&source=
+在生产中遇到一个问题，在使用日期查询时，传入的是 A时间，查询结果缺是 B时间的。通过日志追踪和测试，发现是一个工具类中使用了非线程安全的类Simple..." data-title="QQ">
+              <i class="fa fa-qq"></i>
+            </a>
+          </li>
+          <li>
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://note.olddriver.me/2017/12/17/Java-SimpleDateFormat/" data-title="Facebook">
+              <i class="fa fa-facebook"></i>
+            </a>
+          </li>
+          <li>
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《SimpleDateFormat 时间格式化问题》 — Li7nux's Note&url=http://note.olddriver.me/2017/12/17/Java-SimpleDateFormat/&via=http://note.olddriver.me" data-title="Twitter">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+          <li>
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://note.olddriver.me/2017/12/17/Java-SimpleDateFormat/" data-title="Google+">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        </ul>
+     </div>
+</div>
+<div class="post-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;" id="wxShare-close">×</a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://note.olddriver.me/2017/12/17/Java-SimpleDateFormat/" alt="微信分享二维码">
+</div>
+
+<div class="mask"></div>
+
+        
+        <ul class="article-footer-menu">
+            
+            
+  <li class="article-footer-tags">
+    <i class="fa fa-tags"></i>
+      
+    <a href="/tags/Java/" class="color5">Java</a>
+      
+  </li>
+
+        </ul>
+        
+    </footer>
+  </div>
+</article>
+
+
+    <aside class="post-toc-pos post-toc-top" id="post-toc">
+        <nav class="post-toc-wrap">
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#测试验证"><span class="post-toc-text">测试验证</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#出现异常的原因"><span class="post-toc-text">出现异常的原因</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#为什么-SimpleDateFormat-不是线程安全的-？"><span class="post-toc-text">为什么 SimpleDateFormat 不是线程安全的 ？</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#解决方案"><span class="post-toc-text">解决方案</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#工具类改造"><span class="post-toc-text">工具类改造</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+    
+
+<nav id="article-nav">
+  
+  
+    <a href="/2014/12/10/Java8-01/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">Java 8 新特性</span>
+      <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+    </a>
+  
+</nav>
+
+
+
+    
+</section>
+        
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+      <p>
+        Powered by  <a href="http://hexo.io/" target="_blank">Hexo</a>
+        Theme <a href="//github.com/wongminho/hexo-theme-miho" target="_blank">MiHo</a>
+      &copy; 2017 Li7nux<br>
+      </p>
+    </div>
+  </div>
+</footer>
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script>
+  var mihoConfig = {
+      root: "http://note.olddriver.me",
+      animate: true,
+      isHome: false,
+      share: true,
+      reward: 0
+  }
+</script>
+<div class="sidebar">
+    <div id="sidebar-search" title="Search">
+        <i class="fa fa-search"></i>
+    </div>
+    <div id="sidebar-category" title="Categories">
+        <i class="fa fa-book"></i>
+    </div>
+    <div id="sidebar-tag" title="Tags">
+        <i class="fa fa-tags"></i>
+    </div>
+    <div id="sidebar-top">
+        <span class="sidebar-top-icon"><i class="fa fa-angle-up"></i></span>
+    </div>
+</div>
+<div class="sidebar-menu-box" id="sidebar-menu-box">
+    <div class="sidebar-menu-box-container">
+        <div id="sidebar-menu-box-categories">
+            <a class="category-link" href="/categories/Java/">Java</a><a class="category-link" href="/categories/Java/Algorithm/">Algorithm</a>
+        </div>
+        <div id="sidebar-menu-box-tags">
+            <a href="/tags/Algorithm/" style="font-size: 10px;">Algorithm</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a>
+        </div>
+    </div>
+    <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
+</div>
+<div class="mobile-header-menu-nav" id="mobile-header-menu-nav">
+    <div class="mobile-header-menu-container">
+        <span class="title">Menus</span>
+        <ul class="mobile-header-menu-navbar">
+            
+            <li>
+                <a  href="/">
+                    <i class="fa fa-home"></i><span>Home</span>
+                </a>
+            </li>
+            
+            <li>
+                <a  href="/archives">
+                    <i class="fa fa-archive"></i><span>Archives</span>
+                </a>
+            </li>
+            
+            <li>
+                <a  href="/about">
+                    <i class="fa fa-user"></i><span>About</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    <div class="mobile-header-tag-container">
+        <span class="title">Tags</span>
+        <div id="mobile-header-container-tags">
+            <a href="/tags/Algorithm/" style="font-size: 10px;">Algorithm</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a>
+        </div>
+    </div>
+</div>
+<div class="search-wrap">
+    <span class="search-close">&times;</span>
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+            <i class="icon icon-lg icon-chevron-left"></i>
+        </a>
+        <input class="search-field" placeholder="Search..." id="keywords">
+        <a id="search-submit" href="javascript:;">
+            <i class="fa fa-search"></i>
+        </a>
+    <div class="search-container" id="search-container">
+        <ul class="search-result" id="search-result">
+        </ul>
+    </div>
+</div>
+
+<div id="search-tpl">
+    <li class="search-result-item">
+        <a href="{url}" class="search-item-li">
+            <span class="search-item-li-title" title="{title}">{title}</span>
+        </a>
+    </li>
+</div>
+<script src="/js/search.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+  <script src="//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js"></script>
+  <script src="/js/animate.js"></script>
+
+  </div>
+</body>
+</html>
