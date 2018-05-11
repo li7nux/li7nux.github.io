@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Java Annotation | Li7nux&#39;s Note</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+    <meta name="keywords" content="Li7nux,Li7nux's Note" />
+  
+  <meta name="description" content="Java 注解学习笔记">
+<meta name="keywords" content="Java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java Annotation">
+<meta property="og:url" content="http://note.olddriver.me/2018/05/11/Java Annotation/index.html">
+<meta property="og:site_name" content="Li7nux&#39;s Note">
+<meta property="og:description" content="Java 注解学习笔记">
+<meta property="og:updated_time" content="2018-05-11T08:42:15.530Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java Annotation">
+<meta name="twitter:description" content="Java 注解学习笔记">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/pace.min.js"></script>
+  
+
+  
+  
+
+</head>
+
+<body>
+  <div id="container">
+      <header id="header">
+    <div id="banner"></div>
+    <div id="header-outer">
+        <div id="header-menu" class="header-menu-pos animated">
+            <div class="header-menu-container">
+                <a href="/" class="left">
+                    <span class="site-title">Li7nux&#39;s Note</span>
+                </a>
+                <nav id="header-menu-nav" class="right">
+                    
+                    <a  href="/">
+                        <i class="fa fa-home"></i>
+                        <span>Home</span>
+                    </a>
+                    
+                    <a  href="/archives">
+                        <i class="fa fa-archive"></i>
+                        <span>Archives</span>
+                    </a>
+                    
+                    <a  href="/about">
+                        <i class="fa fa-user"></i>
+                        <span>About</span>
+                    </a>
+                    
+                </nav>
+                <a class="mobile-header-menu-button">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
+        </div>
+        <div id="header-row">
+            <div id="logo">
+                <a href="/">
+                    <img src="/images/logo.png" alt="logo">
+                </a>
+            </div>
+            <div class="header-info">
+                <div id="header-title">
+                    
+                    <h2>
+                        Li7nux&#39;s Note
+                    </h2>
+                    
+                </div>
+                <div id="header-description">
+                    
+                    <h3>
+                        敲代码的手艺人
+                    </h3>
+                    
+                </div>
+            </div>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                        <a title="Li7nux" target="_blank" href="//note.olddriver.me/">
+                            <i class="fa fa-home fa-2x"></i></a>
+                    
+                        <a title="Github" target="_blank" href="//github.com/li7nux">
+                            <i class="fa fa-github fa-2x"></i></a>
+                    
+                        <a title="Weibo" target="_blank" href="//weibo.com/li7nux">
+                            <i class="fa fa-weibo fa-2x"></i></a>
+                    
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>
+      <div class="outer">
+        <section id="main" class="body-wrap"><article id="post-Java Annotation" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="post-title" itemprop="name">
+      Java Annotation
+    </h1>
+    <div class="post-title-bar">
+      <ul>
+          
+              <li>
+                  <i class="fa fa-book"></i>
+                  
+                      <a href="/categories/Java/">Java</a>
+                  
+              </li>
+          
+        <li>
+          <i class="fa fa-calendar"></i>  2018-05-11
+        </li>
+        <li>
+          <i class="fa fa-eye"></i>
+          <span id="busuanzi_value_page_pv"></span>
+        </li>
+      </ul>
+    </div>
+  
+
+          
+      </header>
+    
+    <div class="article-entry post-content" itemprop="articleBody">
+      
+            
+            <blockquote>
+<p>JDK 5中引入了源代码中的注解（annotation）这一机制 ，注解使得Java源代码中不但可以包含功能性的实现代码，还可以添加元数据（MetaData ）。 注解的功能类似于代码中的注释，所不同的是注解不是提供代码功能的说明，而是实现程序功能的重要组成部分。 Java注解已经在很多框架中得到了广泛的使用，用来简化程序中的配置。 </p>
+</blockquote>
+<a id="more"></a>
+<h3 id="什么是注解"><a href="#什么是注解" class="headerlink" title="什么是注解"></a>什么是注解</h3><p><strong>注解本身并不会做任何事情，它需要工具支持才会有用。</strong> 比如JUnit4的@Test注解自身不会做任何事情，JUnit会识别并调用所有标识为@Test的方法，这种识别处理<strong>一般是采用代理模式，通过反射来调用</strong>。注解可用于创建文档，跟踪代码中的依赖性，甚至执行基本编译时检查。 </p>
+<h4 id="注解分类"><a href="#注解分类" class="headerlink" title="注解分类"></a>注解分类</h4><p>根据注解参数的个数，可以将注解分为：标记注解、单值注解、完整注解三类。</p>
+<p>它们都不会直接影响到程序的语义，只是作为注解（标识）存 在，通过反射机制可以实现对这些元数据（用来描述数据的数据）的访问。</p>
+<p>根据 Annotation 的使用方法和用途主要分为以下几类：  内置 Annotation（@Override, @SuppressWarnings等）、第三方开发的 Annotation 类型（如Spring中的 @Controller）、自定义Annotation 等。</p>
+<h4 id="内置注解"><a href="#内置注解" class="headerlink" title="内置注解"></a>内置注解</h4><p>JDK 5 定义了一套注解，共有 7 个，3 个在 java.lang 中，剩下 4 个在 java.lang.annotation 中。</p>
+<p><strong>作用在代码的注解（java.lang包中）</strong></p>
+<ul>
+<li>@Override - 检查该方法是否是重载方法。如果发现其父类，或者是引用的接口中并没有该方法时，会报编译错误。</li>
+<li>@Deprecated - 标记过时方法。如果使用该方法，会报编译警告。</li>
+<li>@SuppressWarnings - 指示编译器去忽略注解中声明的警告。</li>
+</ul>
+<p><strong>作用在其他注解的注解(或者说 元注解，java.lang.annotation包中)</strong></p>
+<ul>
+<li>@Retention - 标识这个注解怎么保存，是只在代码中，还是编入class文件中，或者是在运行时可以通过反射访问。</li>
+<li>@Documented - 标记这些注解是否包含在用户文档中。</li>
+<li>@Target - 标记这个注解应该是哪种 Java 成员。</li>
+<li>@Inherited - 标记这个注解是继承于哪个注解类(默认 注解并没有继承于任何子类)</li>
+</ul>
+<p><strong>从 Java 7 开始，额外添加了 3 个注解</strong></p>
+<ul>
+<li>@SafeVarargs - Java 7 开始支持，忽略任何使用参数为泛型变量的方法或构造函数调用产生的警告。</li>
+<li>@FunctionalInterface - Java 8 开始支持，标识一个匿名函数或函数式接口。</li>
+<li>@Repeatable - Java 8 开始支持，标识某注解可以在同一个声明上使用多次。</li>
+</ul>
+<h3 id="元注解详解"><a href="#元注解详解" class="headerlink" title="元注解详解"></a>元注解详解</h3><h4 id="Documented"><a href="#Documented" class="headerlink" title="Documented"></a>Documented</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> java.lang.annotation;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * Indicates that annotations with a type are to be documented by javadoc</div><div class="line"> * and similar tools by default.  This type should be used to annotate the</div><div class="line"> * declarations of types whose annotations affect the use of annotated</div><div class="line"> * elements by their clients.  If a type declaration is annotated with</div><div class="line"> * Documented, its annotations become part of the public API</div><div class="line"> * of the annotated elements.</div><div class="line"> *</div><div class="line"> * <span class="doctag">@author</span>  Joshua Bloch</div><div class="line"> * <span class="doctag">@since</span> 1.5</div><div class="line"> */</div><div class="line"><span class="meta">@Documented</span></div><div class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</div><div class="line"><span class="meta">@Target</span>(ElementType.ANNOTATION_TYPE)</div><div class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Documented &#123;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>@Documented：用于描述其他类型的annotation应该被作为被标注的程序成员的公共API，因此可以被例如javadoc此类的工具文档化。Documented是一个标记注解，没有成员。</p>
+<p>例如，上面源码@Retention的定义中有一行@Documented，意思是指当前注解的元素会被javadoc工具进行文档化，那么在查看Java API文档时可查看当该注解元素。</p>
+<h4 id="Inherited"><a href="#Inherited" class="headerlink" title="Inherited"></a>Inherited</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> java.lang.annotation;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * Indicates that an annotation type is automatically inherited.  If</div><div class="line"> * an Inherited meta-annotation is present on an annotation type</div><div class="line"> * declaration, and the user queries the annotation type on a class</div><div class="line"> * declaration, and the class declaration has no annotation for this type,</div><div class="line"> * then the class's superclass will automatically be queried for the</div><div class="line"> * annotation type.  This process will be repeated until an annotation for this</div><div class="line"> * type is found, or the top of the class hierarchy (Object)</div><div class="line"> * is reached.  If no superclass has an annotation for this type, then</div><div class="line"> * the query will indicate that the class in question has no such annotation.</div><div class="line"> *</div><div class="line"> * &lt;p&gt;Note that this meta-annotation type has no effect if the annotated</div><div class="line"> * type is used to annotate anything other than a class.  Note also</div><div class="line"> * that this meta-annotation only causes annotations to be inherited</div><div class="line"> * from superclasses; annotations on implemented interfaces have no</div><div class="line"> * effect.</div><div class="line"> *</div><div class="line"> * <span class="doctag">@author</span>  Joshua Bloch</div><div class="line"> * <span class="doctag">@since</span> 1.5</div><div class="line"> * <span class="doctag">@jls</span> 9.6.3.3 <span class="doctag">@Inherited</span></div><div class="line"> */</div><div class="line"><span class="meta">@Documented</span></div><div class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</div><div class="line"><span class="meta">@Target</span>(ElementType.ANNOTATION_TYPE)</div><div class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Inherited &#123;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>@Inherited 元注解是一个标记注解，@Inherited阐述了某个被标注的类型是被继承的。如果一个使用了@Inherited修饰的annotation类型被用于一个class，则这个annotation将被用于该class的子类。 注意：@Inherited annotation类型是被标注过的class的子类所继承。类并不从它所实现的接口继承annotation，方法并不从它所重载的方法继承annotation。 当@Inherited annotation类型标注的annotation的Retention是RetentionPolicy.RUNTIME，则反射API增强了这种继 承性。如果我们使用java.lang.reflect去查询一个@Inherited annotation类型的annotation时，反射代码检查将展开工作：检查class和其父类，直到发现指定的annotation类型被发现， 或者到达类继承结构的顶层。 </p>
+<h4 id="Retention"><a href="#Retention" class="headerlink" title="Retention"></a>Retention</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> java.lang.annotation;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * Indicates how long annotations with the annotated type are to</div><div class="line"> * be retained.  If no Retention annotation is present on</div><div class="line"> * an annotation type declaration, the retention policy defaults to</div><div class="line"> * &#123;<span class="doctag">@code</span> RetentionPolicy.CLASS&#125;.</div><div class="line"> *</div><div class="line"> * &lt;p&gt;A Retention meta-annotation has effect only if the</div><div class="line"> * meta-annotated type is used directly for annotation.  It has no</div><div class="line"> * effect if the meta-annotated type is used as a member type in</div><div class="line"> * another annotation type.</div><div class="line"> *</div><div class="line"> * <span class="doctag">@author</span>  Joshua Bloch</div><div class="line"> * <span class="doctag">@since</span> 1.5</div><div class="line"> * <span class="doctag">@jls</span> 9.6.3.2 <span class="doctag">@Retention</span></div><div class="line"> */</div><div class="line"><span class="meta">@Documented</span></div><div class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</div><div class="line"><span class="meta">@Target</span>(ElementType.ANNOTATION_TYPE)</div><div class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Retention &#123;</div><div class="line">    <span class="comment">/**</span></div><div class="line">     * Returns the retention policy.</div><div class="line">     * <span class="doctag">@return</span> the retention policy</div><div class="line">     */</div><div class="line">    <span class="function">RetentionPolicy <span class="title">value</span><span class="params">()</span></span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>@Retention定义了该Annotation被保留的时间长短：某些Annotation仅出现在源代码中，而被编译器丢弃；而另一些却被编译在class文件中；编译在class文件中的Annotation可能会被虚拟机忽略，而另一些在class 被装载时将被读取（请注意并不影响class的执行，因为Annotation与class在使用上是被分离的）。使用这个meta-Annotation可以对Annotation的“生命周期”限制。 他有以下三种策略 :</p>
+<table>
+<thead>
+<tr>
+<th>RetentionPolicy</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SOURCE</td>
+<td>仅存在Java源文件，经过编译器后便丢弃相应的注解</td>
+</tr>
+<tr>
+<td>CLASS</td>
+<td>存在Java源文件，以及经编译器后生成的Class字节码文件，但在运行时VM不再保留注释</td>
+</tr>
+<tr>
+<td>RUNTIME</td>
+<td>存在源文件、编译生成的Class字节码文件，以及保留在运行时VM中，可通过反射性地读取注解</td>
+</tr>
+</tbody>
+</table>
+<h4 id="Target"><a href="#Target" class="headerlink" title="Target"></a>Target</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Documented</span></div><div class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</div><div class="line"><span class="meta">@Target</span>(ElementType.ANNOTATION_TYPE)</div><div class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Target &#123;</div><div class="line">    <span class="comment">/**</span></div><div class="line">     * Returns an array of the kinds of elements an annotation type</div><div class="line">     * can be applied to.</div><div class="line">     * <span class="doctag">@return</span> an array of the kinds of elements an annotation type</div><div class="line">     * can be applied to</div><div class="line">     */</div><div class="line">    ElementType[] value();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>@Target说明了Annotation所修饰的对象范围：Annotation可被用于 packages、types（类、接口、枚举、Annotation类型）、类型成员（方法、构造方法、成员变量、枚举值）、方法参数和本地变量（如循环变量、catch参数）。在Annotation类型的声明中使用了target可更加明晰其修饰的目标。<br>作用：用于描述注解的使用范围（即：被描述的注解可以用在什么地方）<br>取值:</p>
+<table>
+<thead>
+<tr>
+<th>ElementType</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ANNOTATION_TYPE</td>
+<td>注解类型声明</td>
+</tr>
+<tr>
+<td>CONSTRUCTOR</td>
+<td>用于描述构造器</td>
+</tr>
+<tr>
+<td>FIELD</td>
+<td>字段声明（包括枚举常量）</td>
+</tr>
+<tr>
+<td>LOCAL_VARIABLE</td>
+<td>局部变量声明</td>
+</tr>
+<tr>
+<td>METHOD</td>
+<td>方法声明</td>
+</tr>
+<tr>
+<td>PACKAGE</td>
+<td>包声明</td>
+</tr>
+<tr>
+<td>PARAMETER</td>
+<td>参数声明</td>
+</tr>
+<tr>
+<td>TYPE</td>
+<td>类、接口（包括注解类型）或枚举声明</td>
+</tr>
+</tbody>
+</table>
+<h3 id="内建注解详解"><a href="#内建注解详解" class="headerlink" title="内建注解详解"></a>内建注解详解</h3><h4 id="Override"><a href="#Override" class="headerlink" title="@Override"></a>@Override</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Target</span>(ElementType.METHOD)</div><div class="line"><span class="meta">@Retention</span>(RetentionPolicy.SOURCE)</div><div class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Override &#123;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>@Override注释能实现编译时检查，你可以为你的方法添加该注释，以声明该方法是用于覆盖父类中的方法。如果该方法不是覆盖父类的方法，将会在编译时报错。</p>
+<h4 id="Deprecated"><a href="#Deprecated" class="headerlink" title="@Deprecated"></a>@Deprecated</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Documented</span></div><div class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</div><div class="line"><span class="meta">@Target</span>(value=&#123;CONSTRUCTOR, FIELD, LOCAL_VARIABLE, METHOD, PACKAGE, PARAMETER, TYPE&#125;)</div><div class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Deprecated &#123;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>@Deprecated的作用是对不应该在使用的方法添加注释，当编程人员使用这些方法时，将会在编译时显示提示信息，一般会提供为什么该方法不推荐使用以及相应替代方法。。</p>
+<h4 id="SuppressWarnings"><a href="#SuppressWarnings" class="headerlink" title="@SuppressWarnings"></a>@SuppressWarnings</h4><p>@SuppressWarnings与前两个注释有所不同，你需要添加一个参数才能正确使用，这些参数值都是已经定义好了的，我们选择性的使用就好了，参数如下: </p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>deprecation</td>
+<td>使用了过时的类或方法时的警告</td>
+</tr>
+<tr>
+<td>unchecked</td>
+<td>执行了未检查的转换时的警告，例如当使用集合时没有用泛型 (Generics) 来指定集合保存的类型.</td>
+</tr>
+<tr>
+<td>fallthrough</td>
+<td>当 Switch 程序块直接通往下一种情况而没有 Break 时的警告</td>
+</tr>
+<tr>
+<td>path</td>
+<td>在类路径、源文件路径等有不存在路径时的警告</td>
+</tr>
+<tr>
+<td>serial</td>
+<td>当可序列化的类缺少serialVersionUID定义时的警告</td>
+</tr>
+<tr>
+<td>finally</td>
+<td>任意finally子句不能正常完成时的警告</td>
+</tr>
+<tr>
+<td>all</td>
+<td>以上所有情况的警告</td>
+</tr>
+</tbody>
+</table>
+<h4 id="内建注解的对比"><a href="#内建注解的对比" class="headerlink" title="内建注解的对比"></a>内建注解的对比</h4><table>
+<thead>
+<tr>
+<th>内建注解</th>
+<th>Target</th>
+<th>Retention</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Override</td>
+<td>METHOD</td>
+<td>SOURCE</td>
+</tr>
+<tr>
+<td>SuppressWarnings</td>
+<td>除ANNOTATION_TYPE和PACKAGE外的所有</td>
+<td>SOURCE</td>
+</tr>
+<tr>
+<td>Deprecated</td>
+<td>除ANNOTATION_TYPE外的所有</td>
+<td>RUNTIME</td>
+</tr>
+</tbody>
+</table>
+<h3 id="第三方提供的注解"><a href="#第三方提供的注解" class="headerlink" title="第三方提供的注解"></a><strong>第三方提供的注解</strong></h3><p>这部分也是平时使用比较多的，比如Spring的注解等，用来完成一些配置文件的功能。 </p>
+<h3 id="自定义注解"><a href="#自定义注解" class="headerlink" title="自定义注解"></a>自定义注解</h3><p>由开发者自定义Annotation类型。 要深入学习注解，就必须能定义自己的注解，并使用注解。  </p>
+<p> <a href="https://docs.oracle.com/javase/1.5.0/docs/guide/language/annotations.html" target="_blank" rel="external">Java 官方提供的例子</a>，用注解实现简单的测试框架。</p>
+<h4 id="注解定义"><a href="#注解定义" class="headerlink" title="注解定义"></a>注解定义</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</div><div class="line"><span class="meta">@Target</span>(ElementType.METHOD)</div><div class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Test &#123; &#125;</div></pre></td></tr></table></figure>
+<h4 id="测试类"><a href="#测试类" class="headerlink" title="测试类"></a>测试类</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Foo</span> </span>&#123;</div><div class="line">    <span class="meta">@Test</span> <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">m1</span><span class="params">()</span> </span>&#123; &#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">m2</span><span class="params">()</span> </span>&#123; &#125;</div><div class="line">    <span class="meta">@Test</span> <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">m3</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"Boom"</span>);</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">m4</span><span class="params">()</span> </span>&#123; &#125;</div><div class="line">    <span class="meta">@Test</span> <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">m5</span><span class="params">()</span> </span>&#123; &#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">m6</span><span class="params">()</span> </span>&#123; &#125;</div><div class="line">    <span class="meta">@Test</span> <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">m7</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"Crash"</span>);</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">m8</span><span class="params">()</span> </span>&#123; &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="测试执行类"><a href="#测试执行类" class="headerlink" title="测试执行类"></a>测试执行类</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RunTests</span> </span>&#123;</div><div class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</div><div class="line">      <span class="keyword">int</span> passed = <span class="number">0</span>, failed = <span class="number">0</span>;</div><div class="line">      <span class="keyword">for</span> (Method m : Class.forName(args[<span class="number">0</span>]).getMethods()) &#123;</div><div class="line">         <span class="keyword">if</span> (m.isAnnotationPresent(Test.class)) &#123;</div><div class="line">            <span class="keyword">try</span> &#123;</div><div class="line">               m.invoke(<span class="keyword">null</span>);</div><div class="line">               passed++;</div><div class="line">            &#125; <span class="keyword">catch</span> (Throwable ex) &#123;</div><div class="line">               System.out.printf(<span class="string">"Test %s failed: %s %n"</span>, m, ex.getCause());</div><div class="line">               failed++;</div><div class="line">            &#125;</div><div class="line">         &#125;</div><div class="line">      &#125;</div><div class="line">      System.out.printf(<span class="string">"Passed: %d, Failed %d%n"</span>, passed, failed);</div><div class="line">   &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="执行结果"><a href="#执行结果" class="headerlink" title="执行结果"></a>执行结果</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Test public static void Foo.m3() failed: java.lang.RuntimeException: Boom </div><div class="line">Test public static void Foo.m7() failed: java.lang.RuntimeException: Crash </div><div class="line">Passed: 2, Failed 2</div></pre></td></tr></table></figure>
+<hr>
+<p><a href="http://li7nux.github.io/" target="_blank" rel="external">返回主页</a></p>
+
+            <div class="post-copyright">
+    <div class="content">
+        <p>最后更新： 2018年05月11日 16:42</p>
+        <p>原始链接： <a class="post-url" href="/2018/05/11/Java Annotation/" title="Java Annotation">http://note.olddriver.me/2018/05/11/Java Annotation/</a></p>
+        <footer>
+            <a href="http://note.olddriver.me">
+                <img src="/images/logo.png" alt="Li7nux">
+                Li7nux
+            </a>
+        </footer>
+    </div>
+</div>
+
+      
+        
+            
+
+        
+    </div>
+    <footer class="article-footer">
+        
+        
+<div class="post-share">
+    <a href="javascript:;" id="share-sub" class="post-share-fab">
+        <i class="fa fa-share-alt"></i>
+    </a>
+    <div class="post-share-list" id="share-list">
+        <ul class="share-icons">
+          <li>
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://note.olddriver.me/2018/05/11/Java Annotation/&title=《Java Annotation》 — Li7nux's Note&pic=http://note.olddriver.meimages/logo.png" data-title="微博">
+              <i class="fa fa-weibo"></i>
+            </a>
+          </li>
+          <li>
+            <a class="weixin share-sns" id="wxFab" href="javascript:;" data-title="微信">
+              <i class="fa fa-weixin"></i>
+            </a>
+          </li>
+          <li>
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://note.olddriver.me/2018/05/11/Java Annotation/&title=《Java Annotation》 — Li7nux's Note&source=
+JDK 5中引入了源代码中的注解（annotation）这一机制 ，注解使得Java源代码中不但可以包含功能性的实现代码，还可以添加元数据（MetaDa..." data-title="QQ">
+              <i class="fa fa-qq"></i>
+            </a>
+          </li>
+          <li>
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://note.olddriver.me/2018/05/11/Java Annotation/" data-title="Facebook">
+              <i class="fa fa-facebook"></i>
+            </a>
+          </li>
+          <li>
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Java Annotation》 — Li7nux's Note&url=http://note.olddriver.me/2018/05/11/Java Annotation/&via=http://note.olddriver.me" data-title="Twitter">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+          <li>
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://note.olddriver.me/2018/05/11/Java Annotation/" data-title="Google+">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        </ul>
+     </div>
+</div>
+<div class="post-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;" id="wxShare-close">×</a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://note.olddriver.me/2018/05/11/Java Annotation/" alt="微信分享二维码">
+</div>
+
+<div class="mask"></div>
+
+        
+        <ul class="article-footer-menu">
+            
+            
+  <li class="article-footer-tags">
+    <i class="fa fa-tags"></i>
+      
+    <a href="/tags/Java/" class="color5">Java</a>
+      
+  </li>
+
+        </ul>
+        
+    </footer>
+  </div>
+</article>
+
+
+    <aside class="post-toc-pos post-toc-top" id="post-toc">
+        <nav class="post-toc-wrap">
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#什么是注解"><span class="post-toc-text">什么是注解</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#注解分类"><span class="post-toc-text">注解分类</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#内置注解"><span class="post-toc-text">内置注解</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#元注解详解"><span class="post-toc-text">元注解详解</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Documented"><span class="post-toc-text">Documented</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Inherited"><span class="post-toc-text">Inherited</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Retention"><span class="post-toc-text">Retention</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Target"><span class="post-toc-text">Target</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#内建注解详解"><span class="post-toc-text">内建注解详解</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Override"><span class="post-toc-text">@Override</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Deprecated"><span class="post-toc-text">@Deprecated</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#SuppressWarnings"><span class="post-toc-text">@SuppressWarnings</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#内建注解的对比"><span class="post-toc-text">内建注解的对比</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#第三方提供的注解"><span class="post-toc-text">第三方提供的注解</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#自定义注解"><span class="post-toc-text">自定义注解</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#注解定义"><span class="post-toc-text">注解定义</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#测试类"><span class="post-toc-text">测试类</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#测试执行类"><span class="post-toc-text">测试执行类</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#执行结果"><span class="post-toc-text">执行结果</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+    
+
+<nav id="article-nav">
+  
+  
+    <a href="/2017/12/17/Java-SimpleDateFormat/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">SimpleDateFormat 时间格式化问题</span>
+      <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+    </a>
+  
+</nav>
+
+
+
+    
+</section>
+        
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+      <p>
+        Powered by  <a href="http://hexo.io/" target="_blank">Hexo</a>
+        Theme <a href="//github.com/wongminho/hexo-theme-miho" target="_blank">MiHo</a>
+      &copy; 2018 Li7nux<br>
+      </p>
+    </div>
+  </div>
+</footer>
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script>
+  var mihoConfig = {
+      root: "http://note.olddriver.me",
+      animate: true,
+      isHome: false,
+      share: true,
+      reward: 0
+  }
+</script>
+<div class="sidebar">
+    <div id="sidebar-search" title="Search">
+        <i class="fa fa-search"></i>
+    </div>
+    <div id="sidebar-category" title="Categories">
+        <i class="fa fa-book"></i>
+    </div>
+    <div id="sidebar-tag" title="Tags">
+        <i class="fa fa-tags"></i>
+    </div>
+    <div id="sidebar-top">
+        <span class="sidebar-top-icon"><i class="fa fa-angle-up"></i></span>
+    </div>
+</div>
+<div class="sidebar-menu-box" id="sidebar-menu-box">
+    <div class="sidebar-menu-box-container">
+        <div id="sidebar-menu-box-categories">
+            <a class="category-link" href="/categories/Java/">Java</a><a class="category-link" href="/categories/Java/Algorithm/">Algorithm</a>
+        </div>
+        <div id="sidebar-menu-box-tags">
+            <a href="/tags/Algorithm/" style="font-size: 10px;">Algorithm</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a>
+        </div>
+    </div>
+    <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
+</div>
+<div class="mobile-header-menu-nav" id="mobile-header-menu-nav">
+    <div class="mobile-header-menu-container">
+        <span class="title">Menus</span>
+        <ul class="mobile-header-menu-navbar">
+            
+            <li>
+                <a  href="/">
+                    <i class="fa fa-home"></i><span>Home</span>
+                </a>
+            </li>
+            
+            <li>
+                <a  href="/archives">
+                    <i class="fa fa-archive"></i><span>Archives</span>
+                </a>
+            </li>
+            
+            <li>
+                <a  href="/about">
+                    <i class="fa fa-user"></i><span>About</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    <div class="mobile-header-tag-container">
+        <span class="title">Tags</span>
+        <div id="mobile-header-container-tags">
+            <a href="/tags/Algorithm/" style="font-size: 10px;">Algorithm</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a>
+        </div>
+    </div>
+</div>
+<div class="search-wrap">
+    <span class="search-close">&times;</span>
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+            <i class="icon icon-lg icon-chevron-left"></i>
+        </a>
+        <input class="search-field" placeholder="Search..." id="keywords">
+        <a id="search-submit" href="javascript:;">
+            <i class="fa fa-search"></i>
+        </a>
+    <div class="search-container" id="search-container">
+        <ul class="search-result" id="search-result">
+        </ul>
+    </div>
+</div>
+
+<div id="search-tpl">
+    <li class="search-result-item">
+        <a href="{url}" class="search-item-li">
+            <span class="search-item-li-title" title="{title}">{title}</span>
+        </a>
+    </li>
+</div>
+<script src="/js/search.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/pop-img.js"></script>
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+  <script src="//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js"></script>
+  <script src="/js/animate.js"></script>
+
+<script>
+    if (! mihoConfig.isHome) {
+        $(".article-entry img").popImg();
+    }
+</script>
+  </div>
+</body>
+</html>
