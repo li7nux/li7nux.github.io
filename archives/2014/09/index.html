@@ -268,6 +268,7 @@
 </div>
 <script src="/js/search.js"></script>
 <script src="/js/main.js"></script>
+<script src="/js/pop-img.js"></script>
 
 
 
@@ -280,6 +281,11 @@
   <script src="//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js"></script>
   <script src="/js/animate.js"></script>
 
+<script>
+    if (! mihoConfig.isHome) {
+        $(".article-entry img").popImg();
+    }
+</script>
   </div>
 </body>
 </html>
