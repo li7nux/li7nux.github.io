@@ -3,21 +3,28 @@
 <head>
   <meta charset="utf-8">
   
-  <title>about | Li7nux&#39;s Note</title>
+  <title>线上故障排查之JVM CPU 占用高 | Li7nux&#39;s Note</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
     <meta name="keywords" content="Li7nux,Li7nux's Note" />
   
-  <meta name="description" content="关于作者 Java, Scala, Google fans！  博客介绍 敲代码是一门手艺，做一个敲代码的手艺人！ Hangzhou · China  联系我 知乎 微博 E-Mail GitHub">
-<meta property="og:type" content="website">
-<meta property="og:title" content="about">
-<meta property="og:url" content="http://note.olddriver.me/about/index.html">
+  <meta name="description" content="应用所在服务器 CPU 突然爆满，记录了故障排查的过程。">
+<meta name="keywords" content="Fault,JVM">
+<meta property="og:type" content="article">
+<meta property="og:title" content="线上故障排查之JVM CPU 占用高">
+<meta property="og:url" content="http://note.olddriver.me/2018/04/16/Fault-JVM-High-CPU/index.html">
 <meta property="og:site_name" content="Li7nux&#39;s Note">
-<meta property="og:description" content="关于作者 Java, Scala, Google fans！  博客介绍 敲代码是一门手艺，做一个敲代码的手艺人！ Hangzhou · China  联系我 知乎 微博 E-Mail GitHub">
-<meta property="og:updated_time" content="2017-12-18T14:20:13.887Z">
+<meta property="og:description" content="应用所在服务器 CPU 突然爆满，记录了故障排查的过程。">
+<meta property="og:image" content="http://note.olddriver.me/images/20180416/Top-cpu-high.png">
+<meta property="og:image" content="http://note.olddriver.me/images/20180416/pid-thread-time-list.png">
+<meta property="og:image" content="http://note.olddriver.me/images/20180416/thread-name-16.png">
+<meta property="og:image" content="http://note.olddriver.me/images/20180416/threa-info.png">
+<meta property="og:image" content="http://note.olddriver.me/images/20180416/fault-source.png">
+<meta property="og:updated_time" content="2018-05-17T09:32:22.083Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="about">
-<meta name="twitter:description" content="关于作者 Java, Scala, Google fans！  博客介绍 敲代码是一门手艺，做一个敲代码的手艺人！ Hangzhou · China  联系我 知乎 微博 E-Mail GitHub">
+<meta name="twitter:title" content="线上故障排查之JVM CPU 占用高">
+<meta name="twitter:description" content="应用所在服务器 CPU 突然爆满，记录了故障排查的过程。">
+<meta name="twitter:image" content="http://note.olddriver.me/images/20180416/Top-cpu-high.png">
   
   
     <link rel="icon" href="/favicon.ico">
@@ -105,20 +112,29 @@
     </div>
 </header>
       <div class="outer">
-        <section id="main" class="body-wrap"><article id="page-undefined" class="article article-type-page" itemscope itemprop="blogPost">
+        <section id="main" class="body-wrap"><article id="post-Fault-JVM-High-CPU" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="post-title" itemprop="name">
-      about
+      线上故障排查之JVM CPU 占用高
     </h1>
     <div class="post-title-bar">
       <ul>
           
+              <li>
+                  <i class="fa fa-book"></i>
+                  
+                      <a href="/categories/Fault/">Fault</a>
+                  
+                      <a href="/categories/JVM/">JVM</a>
+                  
+              </li>
+          
         <li>
-          <i class="fa fa-calendar"></i>  2017-12-18
+          <i class="fa fa-calendar"></i>  2018-04-16
         </li>
         <li>
           <i class="fa fa-eye"></i>
@@ -131,27 +147,33 @@
           
       </header>
     
-    <div class="article-entry " itemprop="articleBody">
+    <div class="article-entry post-content" itemprop="articleBody">
       
             
-            <h2 id="关于作者"><a href="#关于作者" class="headerlink" title="关于作者"></a>关于作者</h2><blockquote>
-<p>Java, Scala, Google fans！</p>
+            <blockquote>
+<p>服务升级后没过多久，就收到 CPU 占用率很高的提醒，一般引起程序 CPU 过高的原因可能会是死循环。当时检查了一次代码，没有找到哪里出现死循环了，就直接在服务器上查找定位问题了。本文记录了此次问题的排查过程。 </p>
 </blockquote>
-<h3 id="博客介绍"><a href="#博客介绍" class="headerlink" title="博客介绍"></a>博客介绍</h3><blockquote>
-<p>敲代码是一门手艺，做一个敲代码的手艺人！</p>
-<p>Hangzhou · China</p>
-</blockquote>
-<h3 id="联系我"><a href="#联系我" class="headerlink" title="联系我"></a>联系我</h3><ul>
-<li><a href="http://www.zhihu.com/people/li7nux" target="_blank" rel="external">知乎</a></li>
-<li><a href="http://weibo.com/li7nux" target="_blank" rel="external">微博</a></li>
-<li><a href="mailto:Li7nux@gmail.com" target="_blank" rel="external">E-Mail</a></li>
-<li><a href="https://github.com/li7nux" target="_blank" rel="external">GitHub</a></li>
-</ul>
+<a id="more"></a>
+<h3 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h3><p>收到 CPU 占用率过高的提醒，通过 <code>top</code> 命令查看 CPU 使用情况 :</p>
+<p><img src="/images/20180416/Top-cpu-high.png" alt="high-cpu"></p>
+<p>通过 <code>top</code>命令看到是<code>pid</code> 为<code>29962</code>的这个 <code>Java</code>进程引起的，占用率达到了近<code>400%</code>，引发了此次故障。</p>
+<h3 id="问题排查"><a href="#问题排查" class="headerlink" title="问题排查"></a>问题排查</h3><p>通过 <code>ps -mp pid -o THREAD,tid,time</code> 查看该进程的线程耗时情况: </p>
+<p><img src="/images/20180416/pid-thread-time-list.png" alt=""></p>
+<p>从中可以看出 <code>31784, 31611, 31590</code>等线程都有问题，而且占用了一天零18个小时多。那么接下来就可以通过这几个线程来查看问题了。通过命令<code>printf &quot;%x\n&quot; tid</code>将线程的<code>id</code>转换成16进制:</p>
+<p><img src="/images/20180416/thread-name-16.png" alt=""></p>
+<p>然后就可以通过命令<code>jstack pid |grep tid -A 30</code>打印堆栈信息来查看出问题的代码了 :</p>
+<p><img src="/images/20180416/threa-info.png" alt=""></p>
+<p>然后查看相关的代码，就能找到问题的所在了。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>引起死循环的原因是使用了迭代器，游标没有往下走，同事写的代码，提交了也没仔细看:</p>
+<p><img src="/images/20180416/fault-source.png" alt=""></p>
+<p>其实用<code>Java8</code>的 <code>stream filter</code> 可以完美的避免这种问题。</p>
+<hr>
+<p><a href="http://li7nux.github.io/" target="_blank" rel="external">返回主页</a></p>
 
             <div class="post-copyright">
     <div class="content">
-        <p>最后更新： 2017年12月18日 22:20</p>
-        <p>原始链接： <a class="post-url" href="/about/index.html" title="about">http://note.olddriver.me/about/index.html</a></p>
+        <p>最后更新： 2018年05月17日 17:32</p>
+        <p>原始链接： <a class="post-url" href="/2018/04/16/Fault-JVM-High-CPU/" title="线上故障排查之JVM CPU 占用高">http://note.olddriver.me/2018/04/16/Fault-JVM-High-CPU/</a></p>
         <footer>
             <a href="http://note.olddriver.me">
                 <img src="/images/logo.png" alt="Li7nux">
@@ -177,7 +199,7 @@
     <div class="post-share-list" id="share-list">
         <ul class="share-icons">
           <li>
-            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://note.olddriver.me/about/&title=《about》 — Li7nux's Note&pic=http://note.olddriver.meimages/logo.png" data-title="微博">
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://note.olddriver.me/2018/04/16/Fault-JVM-High-CPU/&title=《线上故障排查之JVM CPU 占用高》 — Li7nux's Note&pic=http://note.olddriver.meimages/logo.png" data-title="微博">
               <i class="fa fa-weibo"></i>
             </a>
           </li>
@@ -187,22 +209,23 @@
             </a>
           </li>
           <li>
-            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://note.olddriver.me/about/&title=《about》 — Li7nux's Note&source=我的学习笔记" data-title="QQ">
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://note.olddriver.me/2018/04/16/Fault-JVM-High-CPU/&title=《线上故障排查之JVM CPU 占用高》 — Li7nux's Note&source=
+服务升级后没过多久，就收到 CPU 占用率很高的提醒，一般引起程序 CPU 过高的原因可能会是死循环。当时检查了一次代码，没有找到哪里出现死循环了，就直..." data-title="QQ">
               <i class="fa fa-qq"></i>
             </a>
           </li>
           <li>
-            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://note.olddriver.me/about/" data-title="Facebook">
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://note.olddriver.me/2018/04/16/Fault-JVM-High-CPU/" data-title="Facebook">
               <i class="fa fa-facebook"></i>
             </a>
           </li>
           <li>
-            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《about》 — Li7nux's Note&url=http://note.olddriver.me/about/&via=http://note.olddriver.me" data-title="Twitter">
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《线上故障排查之JVM CPU 占用高》 — Li7nux's Note&url=http://note.olddriver.me/2018/04/16/Fault-JVM-High-CPU/&via=http://note.olddriver.me" data-title="Twitter">
               <i class="fa fa-twitter"></i>
             </a>
           </li>
           <li>
-            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://note.olddriver.me/about/" data-title="Google+">
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://note.olddriver.me/2018/04/16/Fault-JVM-High-CPU/" data-title="Google+">
               <i class="fa fa-google-plus"></i>
             </a>
           </li>
@@ -212,7 +235,7 @@
 <div class="post-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;" id="wxShare-close">×</a>
     <p>扫一扫，分享到微信</p>
-    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://note.olddriver.me/about/" alt="微信分享二维码">
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://note.olddriver.me/2018/04/16/Fault-JVM-High-CPU/" alt="微信分享二维码">
 </div>
 
 <div class="mask"></div>
@@ -221,6 +244,15 @@
         <ul class="article-footer-menu">
             
             
+  <li class="article-footer-tags">
+    <i class="fa fa-tags"></i>
+      
+    <a href="/tags/Fault/" class="color1">Fault</a>
+      
+    <a href="/tags/JVM/" class="color4">JVM</a>
+      
+  </li>
+
         </ul>
         
     </footer>
@@ -230,10 +262,30 @@
 
     <aside class="post-toc-pos post-toc-top" id="post-toc">
         <nav class="post-toc-wrap">
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#关于作者"><span class="post-toc-text">关于作者</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#博客介绍"><span class="post-toc-text">博客介绍</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#联系我"><span class="post-toc-text">联系我</span></a></li></ol></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#问题描述"><span class="post-toc-text">问题描述</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#问题排查"><span class="post-toc-text">问题排查</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#总结"><span class="post-toc-text">总结</span></a></li></ol>
         </nav>
     </aside>
     
+
+<nav id="article-nav">
+  
+    <a href="/2018/05/11/Java Annotation/" id="article-nav-newer" class="article-nav-link-wrap">
+
+      <span class="article-nav-title">
+        <i class="fa fa-hand-o-left" aria-hidden="true"></i>
+        
+          Java Annotation
+        
+      </span>
+    </a>
+  
+  
+    <a href="/2017/12/17/Java-SimpleDateFormat/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">SimpleDateFormat 时间格式化问题</span>
+      <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+    </a>
+  
+</nav>
 
 
 
